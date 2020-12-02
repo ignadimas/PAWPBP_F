@@ -33,7 +33,7 @@ public interface ApiInterface {
                                                                         @Field("alamat") String alamat,
                                                                         @Field("noTelp") String noTelp);
 
-    @POST("user/delete/{id}")
+    @POST("userdelete{id}")
     Call<com.tubesb.tubespbp.api.UserResponse> deleteUser(@Path("id") String id);
 
     @POST("register")

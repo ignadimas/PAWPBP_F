@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tubesb.tubespbp.BackEndMobil.ViewsMobil;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -75,7 +76,10 @@ public class LoginActivity extends AppCompatActivity {
                 } else if(etPassword.length() <6) {
                     etPassword.setError("Password must be more than 6 characters");
                     etPassword.requestFocus();
-                } else {
+                } else if(etEmail.getText().toString().equalsIgnoreCase("admin@gmail.com") && etPassword.getText().toString().equalsIgnoreCase("admin123")){
+                    Toast.makeText(LoginActivity.this, "Selamat datang admin!", Toast.LENGTH_LONG).show();
+                    loadFragment(new ViewsMobil());
+                }else {
                     email = etEmail.getText().toString().trim();
                     password = etPassword.getText().toString().trim();
 
