@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SplashScreen"
+    android:id="@+id/splash_screen"
+    android:background="#6E3E3E">
+
+    <ImageView
+        android:id="@+id/Hotel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/Slogan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="50dp"
+        android:fontFamily="@font/akronim"
+        android:text="@string/splash"
+        android:textAlignment="center"
+        android:textColor="#DA880D"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
