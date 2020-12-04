@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,8 +27,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.tubesb.tubespbp.DashboardActivity;
 import com.tubesb.tubespbp.LoginActivity;
 import com.tubesb.tubespbp.R;
@@ -46,11 +50,14 @@ public class ViewsMobil extends Fragment {
     private AdapterMobil adapter;
     private List<Mobil> listMobil;
     private View view;
+    private ImageView twGambar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_views_mobil, container, false);
+
+        twGambar = view.findViewById(R.id.ivImg);
 
         loadDaftarMobil();
         return view;
@@ -191,7 +198,7 @@ public class ViewsMobil extends Fragment {
                         String gambar           = jsonObject.optString("imageURL");
                         String seat             = jsonObject.optString("jumlah_seat");
 
-                        Mobil mobil = new Mobil(id, nama, transmisi, harga, gambar, seat);
+                        Mobil mobil = new Mobil(id, nama, transmisi, harga, seat, gambar);
                         listMobil.add(mobil);
                     }
                     adapter.notifyDataSetChanged();

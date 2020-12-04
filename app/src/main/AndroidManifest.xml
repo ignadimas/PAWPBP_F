@@ -25,11 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FrontEnd.ShowProfileActivity"/>
+        <activity android:name=".FrontEnd.EditUserActivity" />
         <activity android:name=".DashboardActivity" />
-        <activity android:name=".MenuActivity" />
         <activity android:name=".BookingActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ChangeProfileActivity" />
         <activity android:name=".AboutActivity" />
 
         <provider

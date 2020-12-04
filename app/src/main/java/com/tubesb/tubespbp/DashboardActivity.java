@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,12 +30,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.tubesb.tubespbp.BackEndMobil.ViewsMobil;
 import com.tubesb.tubespbp.FrontEnd.LihatMobil;
+import com.tubesb.tubespbp.FrontEnd.ShowProfileActivity;
 import com.tubesb.tubespbp.model.User;
 
 public class DashboardActivity extends AppCompatActivity {
 
     public RelativeLayout btnLihat, btnSewa, btnAbout, btnProfil;
-    String userID;
+    String userID, email;
     Button btnlogout;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -43,7 +46,8 @@ public class DashboardActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private User userFromDB, user;
     FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    FragmentTransaction fragmentTransaction, transaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,10 @@ public class DashboardActivity extends AppCompatActivity {
         btnProfil = (RelativeLayout) findViewById(R.id.profil);
         btnlogout = (Button) findViewById(R.id.btn_logout);
 
+        //Pass Email dari Login
+        String email = getIntent().getStringExtra("email");
+        Toast.makeText(DashboardActivity.this, email, Toast.LENGTH_SHORT).show();
+
         databaseReference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -86,7 +94,15 @@ public class DashboardActivity extends AppCompatActivity {
         btnLihat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new LihatMobil());
+                Bundle bundle = new Bundle();
+                bundle.putString("email", email );
+                LihatMobil fragInfo = new LihatMobil();
+                fragInfo.setArguments(bundle);
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction
+                        .replace(R.id.mainFragment,fragInfo)
+                        .commit();
             }
         });
 
@@ -94,8 +110,8 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BookingActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -103,17 +119,17 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
-                finish();
             }
         });
 
         btnProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -127,7 +143,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -153,11 +169,16 @@ public class DashboardActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment, String email) {
+        Bundle bundle = new Bundle();
+        bundle.putString("email", email);
+        Toast.makeText(DashboardActivity.this, email, Toast.LENGTH_SHORT).show();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction
                 .replace(R.id.mainFragment,fragment)
                 .commit();
     }
+
+
 }

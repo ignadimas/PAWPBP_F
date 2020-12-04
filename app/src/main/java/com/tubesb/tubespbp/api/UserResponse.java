@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class UserResponse {
-
     @SerializedName("data")
     @Expose
     private List<UserDAO> users = null;

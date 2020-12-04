@@ -1,7 +1,9 @@
 package com.tubesb.tubespbp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -45,12 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         register = (TextView) findViewById(R.id.registerHere);
         btnLogin = findViewById(R.id.btnLogin);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("users");
 
         if(firebaseAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
             finish();
         }
 
@@ -82,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     email = etEmail.getText().toString().trim();
                     password = etPassword.getText().toString().trim();
-
                     login(email, password);
                 }
             }
@@ -105,10 +107,12 @@ public class LoginActivity extends AppCompatActivity {
                     loadFragment(fragment);
                 } else if(task.isSuccessful() && firebaseAuth.getCurrentUser().isEmailVerified()) {
                     Toast.makeText(com.tubesb.tubespbp.LoginActivity.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(com.tubesb.tubespbp.LoginActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(com.tubesb.tubespbp.LoginActivity.this, "You have not registered or the password does not match", Toast.LENGTH_SHORT).show();
                 }
 
                 progressDialog.dismiss();

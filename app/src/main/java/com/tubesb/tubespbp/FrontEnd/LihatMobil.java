@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -49,11 +50,14 @@ public class LihatMobil extends Fragment {
     private AdapterMobil adapter;
     private List<Mobil> listMobil;
     private View view;
+    private ImageView twGambar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_views_mobil, container, false);
+
+        twGambar = view.findViewById(R.id.ivImg);
 
         loadDaftarMobil();
         return view;
@@ -67,14 +71,29 @@ public class LihatMobil extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.optionmenu, menu);
+        inflater.inflate(R.menu.menu_lihat_mobil, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
+        MenuItem searchItem = menu.findItem(R.id.btnSearch);
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.btnSearch).setVisible(true);
         menu.findItem(R.id.menu_dashboard).setVisible(true);
     }
 
@@ -83,13 +102,16 @@ public class LihatMobil extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.menu_dashboard) {
+            Bundle bundle = this.getArguments();
+            String email = bundle.getString("email");
+            Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), DashboardActivity.class);
+            intent.putExtra("email", email);
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void loadDaftarMobil(){
         setAdapter();
@@ -153,7 +175,7 @@ public class LihatMobil extends Fragment {
                         String gambar           = jsonObject.optString("imageURL");
                         String seat             = jsonObject.optString("jumlah_seat");
 
-                        Mobil mobil = new Mobil(id, nama, transmisi, harga, gambar, seat);
+                        Mobil mobil = new Mobil(id, nama, transmisi, harga, seat, gambar);
                         listMobil.add(mobil);
                     }
                     adapter.notifyDataSetChanged();
@@ -176,5 +198,4 @@ public class LihatMobil extends Fragment {
         });
         queue.add(stringRequest);
     }
-
 }
